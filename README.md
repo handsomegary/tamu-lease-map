@@ -6,15 +6,42 @@ This project is a local interactive web map. The first screen is an SVG map of t
 
 The main page should be opened through the included local Node static server, not by double-clicking `index.html`.
 
+This is needed because the College Station map uses `fetch("college_station.geojson")`. Browsers usually block local file reads when a page is opened with `file://`, while `http://127.0.0.1:8765/` lets the page and GeoJSON file be served from the same local origin.
+
+### Easy Mode: Download ZIP
+
+Use this path if you only want to download the project and see the same effect locally.
+
 Requirements:
 
-- Node.js installed on your computer.
-- This repository downloaded or cloned locally.
+- Node.js installed on your computer. Download and install the LTS version from [nodejs.org](https://nodejs.org/).
+- This repository downloaded locally. Click the green **Code** button on the GitHub page, choose **Download ZIP**, then extract the ZIP file onto your computer.
 
-From the project folder, run:
+Steps:
 
-```powershell
+1. Open your terminal, command prompt, or PowerShell inside the extracted project folder.
+2. Run:
+
+```bash
 cd outputs
+node static_server.js
+```
+
+Keep this terminal window open. Closing it will stop the local server.
+
+Then open this address in your browser:
+
+```text
+http://127.0.0.1:8765/index.html
+```
+
+### Expert Mode: Git Clone
+
+Use this path if you are comfortable with Git and want to keep the project connected to GitHub.
+
+```bash
+git clone https://github.com/handsomegary/tamu-lease-map.git
+cd tamu-lease-map/outputs
 node static_server.js
 ```
 
@@ -24,15 +51,7 @@ Then open:
 http://127.0.0.1:8765/index.html
 ```
 
-This is needed because the College Station map uses `fetch("college_station.geojson")`. Browsers usually block local file reads when a page is opened with `file://`, while `http://127.0.0.1:8765/` lets the page and GeoJSON file be served from the same local origin.
-
-If you cloned the project with Git, the full flow is:
-
-```powershell
-git clone https://github.com/handsomegary/tamu-lease-map.git
-cd tamu-lease-map\outputs
-node static_server.js
-```
+On Windows, `cd tamu-lease-map\outputs` also works.
 
 ## Project Structure
 
