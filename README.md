@@ -4,10 +4,17 @@ This project is a local interactive web map. The first screen is an SVG map of t
 
 ## How to Run
 
-The main page should be opened through the local Node static server, not by double-clicking `index.html`.
+The main page should be opened through the included local Node static server, not by double-clicking `index.html`.
+
+Requirements:
+
+- Node.js installed on your computer.
+- This repository downloaded or cloned locally.
+
+From the project folder, run:
 
 ```powershell
-cd C:\Users\User\Documents\Codex\2026-06-26\1\outputs
+cd outputs
 node static_server.js
 ```
 
@@ -18,6 +25,14 @@ http://127.0.0.1:8765/index.html
 ```
 
 This is needed because the College Station map uses `fetch("college_station.geojson")`. Browsers usually block local file reads when a page is opened with `file://`, while `http://127.0.0.1:8765/` lets the page and GeoJSON file be served from the same local origin.
+
+If you cloned the project with Git, the full flow is:
+
+```powershell
+git clone https://github.com/handsomegary/tamu-lease-map.git
+cd tamu-lease-map\outputs
+node static_server.js
+```
 
 ## Project Structure
 
@@ -244,11 +259,11 @@ To make the College Station map more offline-friendly:
 
 ## Git Notes
 
-The project is initialized as a local Git repository.
+The public GitHub repository is:
 
-Current policy:
+```text
+https://github.com/handsomegary/tamu-lease-map
+```
 
-- Commit only after checking the working tree.
-- Ask before pushing.
-- No remote is configured yet.
+The default branch is `main`.
 
