@@ -59,7 +59,6 @@ On Windows, `cd tamu-lease-map\outputs` also works.
 .
 |-- README.md
 |-- .gitignore
-|-- .codexignore
 |-- outputs/
 |   |-- index.html
 |   |-- static_server.js
@@ -132,10 +131,6 @@ Development/source helpers used while building the SVG U.S. map:
 - `build_interactive_map.py`: helper script used to build the interactive map output.
 - `map_projection_check.py`: helper script for checking TAMU coordinate placement.
 - `states-10m.json`: map/geographic source data used during development.
-
-`.codexignore`
-
-Keeps large GIS/raw data files out of Codex context by default so future edits do not waste tokens reading multi-megabyte GeoJSON files. These files remain in the repository and are still served normally by the local web app.
 
 ## Online Sources and External Dependencies
 
