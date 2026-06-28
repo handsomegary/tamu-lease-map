@@ -1,0 +1,258 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.320521,
+          30.6108331,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Village Drive, College Station, TX 77840美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.3383678,
+          30.6197045,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Ross and Bizzell - North, 大學城德克薩斯美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.3483763,
+          30.6186017,
+          0
+        ]
+      },
+      "properties": {
+        "name": "12 North Apartments, Church Avenue, 大學城德克薩斯美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.3431832,
+          30.616421,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Fish Pond - South, 大學城德克薩斯美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.3384087,
+          30.6196731,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Ross and Bizzell - North, 大學城德克薩斯美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.306811,
+          30.612094,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Brentwood @ Colgate Circle, 大學城德克薩斯美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.3384093,
+          30.6196727,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Ross and Bizzell - North, 大學城德克薩斯美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.3102879,
+          30.6059072,
+          0
+        ]
+      },
+      "properties": {
+        "name": "southwest parkway @anderson",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.3384087,
+          30.6196731,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Ross and Bizzell - North, 大學城德克薩斯美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.3091125,
+          30.6208404,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Dartmouth, College Station, TX 77840美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.3384087,
+          30.6196731,
+          0
+        ]
+      },
+      "properties": {
+        "name": "Ross and Bizzell - North, 大學城德克薩斯美國",
+        "租金": "",
+        "經過公車路線": "",
+        "styleUrl": "#icon-1899-DB4436-nodesc",
+        "styleHash": "39590fa4",
+        "styleMapHash": {
+          "normal": "#icon-1899-DB4436-nodesc-normal",
+          "highlight": "#icon-1899-DB4436-nodesc-highlight"
+        },
+        "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+      }
+    }
+  ]
+}

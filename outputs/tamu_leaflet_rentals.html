@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TAMU Lease Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #242a2e;
+      --muted: #65727c;
+      --panel: #ffffff;
+      --line: rgba(36, 42, 46, 0.14);
+      --accent: #d9534f;
+      --badge: #ffc107;
+      --shadow: 0 18px 48px rgba(31, 45, 54, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #eef1f2;
+    }
+
+    .map-page {
+      position: relative;
+      min-height: 100%;
+    }
+
+    #map {
+      width: 100%;
+      height: 100vh;
+      min-height: 560px;
+      background: #f7f8f8;
+    }
+
+    .map-title {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      z-index: 500;
+      max-width: min(420px, calc(100vw - 36px));
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .map-title h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .map-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .map-status {
+      position: absolute;
+      left: 18px;
+      bottom: 24px;
+      z-index: 500;
+      max-width: min(520px, calc(100vw - 36px));
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 700;
+      box-shadow: 0 10px 26px rgba(31, 45, 54, 0.12);
+    }
+
+    .map-status[hidden] {
+      display: none;
+    }
+
+    .lease-pin-icon {
+      border: 0;
+      background: transparent;
+    }
+
+    .lease-pin {
+      position: relative;
+      display: block;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #ffffff;
+      border-radius: 50% 50% 50% 0;
+      background: var(--accent);
+      box-shadow: 0 11px 22px rgba(36, 42, 46, 0.3);
+      transform: rotate(-45deg);
+      transform-origin: 50% 50%;
+    }
+
+    .lease-pin::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ffffff;
+      transform: translate(-50%, -50%);
+    }
+
+    .leaflet-marker-icon:hover .lease-pin {
+      filter: brightness(1.05);
+      transform: rotate(-45deg) translate(2px, -2px);
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: 8px;
+      box-shadow: 0 18px 46px rgba(31, 45, 54, 0.22);
+    }
+
+    .leaflet-popup-content {
+      margin: 0;
+      min-width: 240px;
+    }
+
+    .tamu-popup {
+      padding: 14px 15px 15px;
+      color: var(--ink);
+    }
+
+    .tamu-popup h3 {
+      margin: 0 0 9px;
+      font-size: 1rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .tamu-popup .rent {
+      margin: 0 0 11px;
+      color: var(--accent);
+      font-size: 1.2rem;
+      font-weight: 900;
+      line-height: 1.15;
+    }
+
+    .route-label {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .route-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .route-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--badge);
+      color: #2d2300;
+      font-size: 0.78rem;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: inset 0 -1px 0 rgba(45, 35, 0, 0.16);
+    }
+
+    .route-empty {
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .leaflet-control-layers {
+      border: 1px solid var(--line) !important;
+      border-radius: 8px !important;
+      box-shadow: 0 10px 28px rgba(31, 45, 54, 0.12) !important;
+    }
+
+    .leaflet-control-layers-expanded {
+      padding: 9px 11px 10px !important;
+    }
+
+    @media (max-width: 640px) {
+      #map {
+        min-height: 100vh;
+      }
+
+      .map-title {
+        right: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="map-page">
+    <div id="map" aria-label="TAMU lease map"></div>
+    <section class="map-title" aria-label="Map title">
+      <h1>TAMU Lease Map</h1>
+      <p>College Station roads and lease locations near Texas A&amp;M University.</p>
+    </section>
+    <div class="map-status" data-status>Loading college_station.geojson and leases.geojson...</div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const TAMU_CENTER = [30.6099, -96.3405];
+    const RENT_KEY = "\u79df\u91d1";
+    const ROUTE_KEY = "\u7d93\u904e\u516c\u8eca\u8def\u7dda";
+    const statusEl = document.querySelector("[data-status]");
+
+    const map = L.map("map", {
+      center: TAMU_CENTER,
+      zoom: 14,
+      zoomControl: true,
+      preferCanvas: true,
+    });
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
+      subdomains: "abcd",
+      maxZoom: 20,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    }).addTo(map);
+
+    const leaseIcon = L.divIcon({
+      className: "lease-pin-icon",
+      html: '<span class="lease-pin"></span>',
+      iconSize: [36, 44],
+      iconAnchor: [18, 42],
+      popupAnchor: [0, -38],
+    });
+
+    function setStatus(message) {
+      statusEl.textContent = message;
+      statusEl.hidden = !message;
+    }
+
+    async function loadGeoJson(url) {
+      const response = await fetch(url, { cache: "no-cache" });
+      if (!response.ok) {
+        throw new Error(`${url} returned ${response.status}`);
+      }
+      return response.json();
+    }
+
+    function isRoadGeometry(feature) {
+      const type = feature?.geometry?.type;
+      return type === "LineString" || type === "MultiLineString";
+    }
+
+    function isLeasePoint(feature) {
+      return feature?.geometry?.type === "Point";
+    }
+
+    function splitRoutes(routeText) {
+      return String(routeText || "")
+        .split(",")
+        .map((route) => route.trim())
+        .filter(Boolean);
+    }
+
+    function appendText(parent, tagName, className, text) {
+      const element = document.createElement(tagName);
+      element.className = className;
+      element.textContent = text;
+      parent.appendChild(element);
+      return element;
+    }
+
+    function createLeasePopup(feature) {
+      const props = feature.properties || {};
+      const wrapper = document.createElement("div");
+      wrapper.className = "tamu-popup";
+
+      appendText(wrapper, "h3", "", props.name || "Unnamed apartment");
+      appendText(wrapper, "p", "rent", props[RENT_KEY] || "Rent not listed");
+      appendText(wrapper, "p", "route-label", "Bus routes");
+
+      const badges = document.createElement("div");
+      badges.className = "route-badges";
+      const routes = splitRoutes(props[ROUTE_KEY]);
+
+      if (routes.length) {
+        routes.forEach((route) => appendText(badges, "span", "route-badge", route));
+      } else {
+        appendText(badges, "span", "route-empty", "No bus routes listed");
+      }
+
+      wrapper.appendChild(badges);
+      return wrapper;
+    }
+
+    function fitToLoadedLayers(layers) {
+      const combined = L.latLngBounds([]);
+      layers.forEach((layer) => {
+        const bounds = layer.getBounds?.();
+        if (bounds?.isValid()) {
+          combined.extend(bounds);
+        }
+      });
+
+      if (combined.isValid()) {
+        map.fitBounds(combined.pad(0.08), { maxZoom: 15 });
+      }
+    }
+
+    async function initLayers() {
+      try {
+        const [roadsGeoJson, leasesGeoJson] = await Promise.all([
+          loadGeoJson("college_station.geojson"),
+          loadGeoJson("leases.geojson"),
+        ]);
+
+        const roadsLayer = L.geoJSON(roadsGeoJson, {
+          filter: isRoadGeometry,
+          style: {
+            color: "#7a7a7a",
+            weight: 2.5,
+            opacity: 0.6,
+            lineCap: "round",
+            lineJoin: "round",
+          },
+        }).addTo(map);
+
+        const leasesLayer = L.geoJSON(leasesGeoJson, {
+          filter: isLeasePoint,
+          pointToLayer(feature, latlng) {
+            return L.marker(latlng, {
+              icon: leaseIcon,
+              riseOnHover: true,
+              keyboard: true,
+            });
+          },
+          onEachFeature(feature, layer) {
+            layer.bindPopup(createLeasePopup(feature), {
+              maxWidth: 340,
+              className: "lease-popup-shell",
+            });
+          },
+        }).addTo(map);
+
+        L.control.layers(null, {
+          Roads: roadsLayer,
+          Leases: leasesLayer,
+        }, {
+          collapsed: false,
+        }).addTo(map);
+
+        fitToLoadedLayers([roadsLayer, leasesLayer]);
+        setStatus(`Loaded ${roadsLayer.getLayers().length} road segments and ${leasesLayer.getLayers().length} lease pins.`);
+        window.setTimeout(() => setStatus(""), 3600);
+      } catch (error) {
+        console.error(error);
+        setStatus("Could not load GeoJSON files. Use a local web server and keep college_station.geojson, leases.geojson, and this HTML in the same folder.");
+      }
+    }
+
+    initLayers();
+  </script>
+</body>
+</html>
