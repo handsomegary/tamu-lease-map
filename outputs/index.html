@@ -348,6 +348,33 @@
       pointer-events: none;
     }
 
+    #usa-map g.state {
+      transition: transform 0.25s ease, filter 0.25s ease;
+      transform: translateY(0) translateX(0);
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    #usa-map g.state:hover {
+      transform: translateY(-12px) translateX(-4px);
+      transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      filter:
+        drop-shadow(1px 1px 0px rgba(31, 45, 54, 0.6))
+        drop-shadow(2px 2px 0px rgba(31, 45, 54, 0.6))
+        drop-shadow(3px 3px 0px rgba(31, 45, 54, 0.6))
+        drop-shadow(4px 4px 0px rgba(31, 45, 54, 0.6))
+        drop-shadow(5px 5px 0px rgba(31, 45, 54, 0.6))
+        drop-shadow(6px 6px 0px rgba(31, 45, 54, 0.6))
+        drop-shadow(7px 7px 0px rgba(31, 45, 54, 0.6))
+        drop-shadow(8px 8px 0px rgba(31, 45, 54, 0.6))
+        drop-shadow(4px 15px 20px rgba(31, 45, 54, 0.35));
+    }
+
+    #usa-map g.state:has(> path.is-zoomed):hover {
+      transform: translateY(0) translateX(0);
+      filter: none;
+    }
+
     #usa-map g.state > path:not(.is-zoomed):hover,
     #usa-map g.state > path.is-active,
     #usa-map g.state > path:focus-visible,
@@ -355,10 +382,9 @@
     #usa-map circle.dc.is-active,
     #usa-map circle.dc:focus-visible {
       fill: var(--hover);
-      stroke: rgba(31, 45, 54, 0.34);
-      stroke-width: 1.18;
-      transform: translateY(-14px);
-      filter: url(#state-extrude);
+      stroke: #ffffff;
+      stroke-width: 1.5px;
+      stroke-linejoin: round;
     }
 
     #usa-map g.state > path.is-zoomed,
@@ -392,13 +418,17 @@
       transform-origin: center;
     }
 
-    #usa-map g.borders path.is-active-border {
-      transform: translateY(-14px);
-      stroke: rgba(255, 255, 255, 0.95);
-      stroke-width: 1.55;
-      filter: none;
+    #usa-map.has-active-state g.borders path:not(.is-active-border) {
+      opacity: 0;
     }
 
+    #usa-map g.borders path.is-active-border {
+      transform: translateY(-12px) translateX(-4px);
+      stroke: #ffffff;
+      stroke-width: 1.5px;
+      filter: none;
+      opacity: 1;
+    }
     #usa-map g.borders path.is-zoomed-border {
       transform: none;
       stroke: rgba(255, 255, 255, 0.95);
@@ -430,6 +460,7 @@
       opacity: 1;
     }
 
+    #usa-map.is-tamu-zoom > g.states,
     #usa-map.is-tamu-zoom > g.state,
     #usa-map.is-tamu-zoom > g.borders,
     #usa-map.is-tamu-zoom > circle.state,
@@ -617,7 +648,7 @@
       </feMerge>
     </filter>
   </defs>
-<g class="state">
+<g class="states">
 
 <path class="al" d="m 643,467.4 .4,-7.3 -.9,-1.2 -1.7,-.7 -2.5,-2.8 .5,-2.9 48.8,-5.1 -.7,-2.2 -1.5,-1.5 -.5,-1.4 .6,-6.3 -2.4,-5.7 .5,-2.6 .3,-3.7 2.2,-3.8 -.2,-1.1 -1.7,-1 v -3.2 l -1.8,-1.9 -2.9,-6.1 -12.9,-45.8 -45.7,4 1.3,2 -1.3,67 4.4,33.2 .9,-.5 1.3,.1 .6,.4 .8,-.1 2,-3.8 v -2.3 l 1.1,-1.1 1.4,.5 3.4,6.4 v .9 l -3.3,2.2 3.5,-.4 4.9,-1.6 z">
 <title>Alabama</title></path>
@@ -923,14 +954,36 @@
     const mapBoard = document.querySelector(".map-board");
     const tamuLeafletElement = document.querySelector(".tamu-leaflet-map");
     const tamuLeafletStatus = document.querySelector(".tamu-leaflet-status");
+    const svgNS = "http://www.w3.org/2000/svg";
+    const stateLayer = map.querySelector("#usa-map > g.states") || map.querySelector("#usa-map > g.state");
+
+    function wrapStatePaths() {
+      if (!stateLayer) {
+        return;
+      }
+
+      stateLayer.classList.remove("state");
+      stateLayer.classList.add("states");
+
+      const paths = Array.from(stateLayer.children)
+        .filter((child) => child.tagName.toLowerCase() === "path");
+
+      paths.forEach((path) => {
+        const wrapper = document.createElementNS(svgNS, "g");
+        wrapper.setAttribute("class", "state");
+        stateLayer.insertBefore(wrapper, path);
+        wrapper.appendChild(path);
+      });
+    }
+
+    wrapStatePaths();
+
     const interactiveStates = Array.from(map.querySelectorAll("g.state > path:not(.dc), circle.dc"));
     const campusPins = Array.from(map.querySelectorAll("#usa-map .campus-pin"));
     const campusPinScales = campusPins.map((pin) => pin.querySelector(".campus-pin-scale"));
-    const svgNS = "http://www.w3.org/2000/svg";
     const tamuLayer = document.createElementNS(svgNS, "g");
     tamuLayer.setAttribute("class", "tamu-detail");
     map.insertBefore(tamuLayer, campusPins[0] || null);
-    const stateLayer = map.querySelector("g.state");
     const borderLayer = map.querySelector("g.borders");
     const borderSegments = Array.from(map.querySelectorAll("#usa-map g.borders path"));
     let activeState = null;
@@ -958,10 +1011,14 @@
     }
 
     function clearActiveBorders() {
+      map.classList.remove("has-active-state");
       borderSegments.forEach((segment) => segment.classList.remove("is-active-border", "is-zoomed-border"));
     }
     function setActiveBorders(code, className = "is-active-border") {
       clearActiveBorders();
+      if (className === "is-active-border") {
+        map.classList.add("has-active-state");
+      }
       const lowerCode = code.toLowerCase();
       borderSegments.forEach((segment) => {
         const isRelated = Array.from(segment.classList).some((className) => className.split("-").includes(lowerCode));
@@ -989,11 +1046,11 @@
     }
 
     function bringStateToFront(element) {
-      if (element.parentElement === stateLayer) {
-        stateLayer.appendChild(element);
+      const target = element.closest("g.state") || element;
+      if (target.parentElement === stateLayer) {
+        stateLayer.appendChild(target);
       }
     }
-
     function createSvgElement(name, attributes = {}) {
       const element = document.createElementNS(svgNS, name);
       Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));

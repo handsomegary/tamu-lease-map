@@ -17,7 +17,13 @@ Requirements:
 - Node.js installed on your computer. Download and install the LTS version from [nodejs.org](https://nodejs.org/).
 - This repository downloaded locally. Click the green **Code** button on the GitHub page, choose **Download ZIP**, then extract the ZIP file onto your computer.
 
-Steps:
+Windows one-click option:
+
+1. Open the `outputs` folder.
+2. Double-click `click_to_open_the_whole_project.bat`.
+3. Keep the server window open while using the map. Closing it will stop the local server.
+
+Manual terminal option:
 
 1. Open your terminal, command prompt, or PowerShell inside the extracted project folder.
 2. Run:
@@ -62,6 +68,7 @@ On Windows, `cd tamu-lease-map\outputs` also works.
 |-- outputs/
 |   |-- index.html
 |   |-- static_server.js
+|   |-- click_to_open_the_whole_project.bat
 |   |-- college_station.geojson
 |   |-- export.geojson
 |   |-- leases.geojson
@@ -96,6 +103,10 @@ http://127.0.0.1:8765/
 ```
 
 It is local only. It is used so the browser can load `college_station.geojson` through `fetch()`.
+
+`outputs/click_to_open_the_whole_project.bat`
+
+Windows one-click launcher for non-developer users. It detects its own folder, opens the local map URL in the default browser, then starts `node static_server.js` in the same window.
 
 `outputs/college_station.geojson`
 
@@ -203,7 +214,6 @@ Network requirement:
 
 - The road overlay itself does not require the internet after the GeoJSON file exists locally.
 - It does require the local HTTP server because the page uses `fetch()`.
-
 ### Wikimedia Commons / U.S. SVG Map Source
 
 Used by: original U.S. map outline in `outputs/index.html`
