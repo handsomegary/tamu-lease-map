@@ -169,6 +169,16 @@ To make the Leaflet map more offline-friendly:
 3. Keep serving the project through the local Node server, or embed the GeoJSON directly into JavaScript.
 4. Accept a blank/minimal background, or prepare offline map tiles.
 
+## Related Repositories
+
+[puzzle-game-gpt](https://github.com/handsomegary/puzzle-game-gpt)
+
+Python solvers and an Excel workbook for a 13-position magic diamond puzzle using the numbers 1 through 13. It includes target-sum search, multiprocessing, and symmetry reduction across rotations and reflections.
+
+[python-automation](https://github.com/handsomegary/python-automation)
+
+A collection of Python automation scripts for course material downloading and math puzzle solving. It includes course archive crawlers/downloaders, resumable download workflows, and magic diamond puzzle solver utilities.
+
 ## Git Notes
 
 Current public repository:
