@@ -2,6 +2,10 @@
 
 A local interactive map centered on Texas A&M University and surrounding Texas city areas. The app starts from a Texas-focused SVG view, then opens a unified Leaflet map for TAMU, TX-6, Houston/IAH, and related pins using one combined road file: `export.geojson`.
 
+## Repository Description
+
+Interactive Texas map for TAMU, TX-6, Houston/IAH, and surrounding city pins, built with a Texas SVG entry view, Leaflet, CartoDB Positron tiles, and one combined OpenStreetMap-derived GeoJSON road layer.
+
 ## How to Run
 
 The main page should be opened through the included local Node static server, not by double-clicking `index.html`.
