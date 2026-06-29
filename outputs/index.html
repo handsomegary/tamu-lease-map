@@ -152,7 +152,9 @@
       transform: translate(-50%, -50%) scale(0.96);
     }
 
-    .map-board.is-tamu-zoom .tamu-leaflet-panel {
+    .map-board.is-tamu-zoom .tamu-leaflet-panel,
+    .map-board.is-iah-zooming .tamu-leaflet-panel,
+    .map-board.is-iah-zoom .tamu-leaflet-panel {
       position: fixed;
       inset: 0;
       left: 0;
@@ -168,13 +170,30 @@
       transform: none;
     }
 
-    .map-board.is-tamu-zoom .reset-view {
+    .map-board.is-tamu-zoom .reset-view,
+    .map-board.is-iah-zoom .reset-view {
       position: fixed;
       top: 18px;
       right: 18px;
       z-index: 20;
     }
 
+    .iah-leaflet-map {
+      display: none;
+      width: 100%;
+      height: 100%;
+      background: #edf2f0;
+    }
+
+    .map-board.is-iah-zooming .tamu-leaflet-map,
+    .map-board.is-iah-zoom .tamu-leaflet-map {
+      display: block;
+    }
+
+    .map-board.is-iah-zooming .iah-leaflet-map,
+    .map-board.is-iah-zoom .iah-leaflet-map {
+      display: none;
+    }
     .tamu-leaflet-map {
       display: block;
       width: 100%;
@@ -197,12 +216,14 @@
       box-shadow: 0 8px 18px rgba(31, 45, 54, 0.14);
     }
 
-    .lease-pin-icon {
+    .lease-pin-icon,
+    .building-pin-icon {
       border: 0;
       background: transparent;
     }
 
-    .lease-pin {
+    .lease-pin,
+    .building-pin {
       position: relative;
       display: block;
       width: 30px;
@@ -338,10 +359,8 @@
       stroke: rgba(31, 45, 54, 0.16);
       stroke-width: 1.05;
       cursor: pointer;
-      transition: fill 210ms ease, filter 210ms ease, transform 210ms cubic-bezier(0.2, 0.8, 0.2, 1), stroke 210ms ease;
+      transition: fill 0.18s ease, stroke 0.18s ease;
       vector-effect: non-scaling-stroke;
-      transform-box: fill-box;
-      transform-origin: center;
       outline: none;
     }
 
@@ -349,36 +368,37 @@
       fill: var(--state-alt);
     }
 
+    #usa-map.texas-only g.state > path:not(.tx),
+    #usa-map.texas-only circle.dc,
+    #usa-map.texas-only .separator1 {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #usa-map.texas-only g.borders path:not(.ar-tx):not(.la-tx):not(.nm-tx):not(.ok-tx) {
+      opacity: 0;
+    }
+
+    #usa-map.texas-only g.state > path.tx {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    #usa-map.texas-only g.state > path.tx:hover,
+    #usa-map.texas-only g.state > path.tx.is-active,
+    #usa-map.texas-only g.state > path.tx:focus-visible {
+      fill: var(--state) !important;
+      stroke: rgba(31, 45, 54, 0.16) !important;
+      stroke-width: 1.05 !important;
+    }
+    #usa-map.texas-only .city-pin {
+      opacity: 1;
+      pointer-events: all;
+    }
     #usa-map g.state > path.dc {
       pointer-events: none;
     }
 
-    #usa-map g.state {
-      transition: transform 0.25s ease, filter 0.25s ease;
-      transform: translateY(0) translateX(0);
-      transform-box: fill-box;
-      transform-origin: center;
-    }
-
-    #usa-map g.state:hover {
-      transform: translateY(-12px) translateX(-4px);
-      transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      filter:
-        drop-shadow(1px 1px 0px rgba(31, 45, 54, 0.6))
-        drop-shadow(2px 2px 0px rgba(31, 45, 54, 0.6))
-        drop-shadow(3px 3px 0px rgba(31, 45, 54, 0.6))
-        drop-shadow(4px 4px 0px rgba(31, 45, 54, 0.6))
-        drop-shadow(5px 5px 0px rgba(31, 45, 54, 0.6))
-        drop-shadow(6px 6px 0px rgba(31, 45, 54, 0.6))
-        drop-shadow(7px 7px 0px rgba(31, 45, 54, 0.6))
-        drop-shadow(8px 8px 0px rgba(31, 45, 54, 0.6))
-        drop-shadow(4px 15px 20px rgba(31, 45, 54, 0.35));
-    }
-
-    #usa-map g.state:has(> path.is-zoomed):hover {
-      transform: translateY(0) translateX(0);
-      filter: none;
-    }
 
     #usa-map g.state > path:not(.is-zoomed):hover,
     #usa-map g.state > path.is-active,
@@ -386,10 +406,13 @@
     #usa-map circle.dc:not(.is-zoomed):hover,
     #usa-map circle.dc.is-active,
     #usa-map circle.dc:focus-visible {
-      fill: var(--hover);
-      stroke: #ffffff;
-      stroke-width: 1.5px;
+      fill: var(--hover) !important;
+      stroke: #ffffff !important;
+      stroke-width: 1.5px !important;
       stroke-linejoin: round;
+      cursor: pointer;
+      transform: none !important;
+      filter: none !important;
     }
 
     #usa-map g.state > path.is-zoomed,
@@ -423,12 +446,7 @@
       transform-origin: center;
     }
 
-    #usa-map.has-active-state g.borders path:not(.is-active-border) {
-      opacity: 0;
-    }
-
     #usa-map g.borders path.is-active-border {
-      transform: translateY(-12px) translateX(-4px);
       stroke: #ffffff;
       stroke-width: 1.5px;
       filter: none;
@@ -467,6 +485,8 @@
 
     #usa-map.is-tamu-zoom > g.states,
     #usa-map.is-tamu-zoom > g.state,
+    #usa-map.is-iah-zoom > g.states,
+    #usa-map.is-iah-zoom > g.state,
     #usa-map.is-tamu-zoom > g.borders,
     #usa-map.is-tamu-zoom > circle.state,
     #usa-map.is-tamu-zoom > .separator1 {
@@ -484,6 +504,20 @@
       cursor: pointer;
       pointer-events: all;
       outline: none;
+    }
+
+    #usa-map .city-pin {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #usa-map.is-zoomed .city-pin,
+    #usa-map.is-tamu-zooming .city-pin,
+    #usa-map.is-tamu-zoom .city-pin,
+    #usa-map.is-iah-zooming .city-pin,
+    #usa-map.is-iah-zoom .city-pin {
+      opacity: 1;
+      pointer-events: all;
     }
 
     #usa-map .campus-pin-shape {
@@ -618,23 +652,23 @@
   <main>
     <header class="topbar">
       <div>
-        <h1>Interactive US Map</h1>
-        <p class="subtitle">50 states + Washington DC, 51 interactive regions.</p>
+        <h1>Interactive Texas Map</h1>
+        <p class="subtitle">Texas-focused view with TAMU and city pins.</p>
       </div>
       <aside class="readout" aria-live="polite">
         <span class="readout-label">Selected region</span>
         <div class="readout-state">
-          <span class="readout-name" data-state-name>United States</span>
-          <span class="readout-code" data-state-code>51</span>
+          <span class="readout-name" data-state-name>Texas</span>
+          <span class="readout-code" data-state-code>TX</span>
         </div>
       </aside>
     </header>
 
     <section class="map-board" aria-label="Interactive map area">
       <div class="map-frame">
-<svg id="usa-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" role="img" aria-labelledby="mapTitle mapDesc" preserveAspectRatio="xMidYMid meet">
-  <title id="mapTitle">Interactive U.S. map</title>
-  <desc id="mapDesc">Fifty U.S. states plus the District of Columbia.</desc>
+<svg id="usa-map" class="texas-only" xmlns="http://www.w3.org/2000/svg" viewBox="220 310 440 272.23" role="img" aria-labelledby="mapTitle mapDesc" preserveAspectRatio="xMidYMid meet">
+  <title id="mapTitle">Interactive Texas map</title>
+  <desc id="mapDesc">Texas-focused map with the original U.S. state SVG data preserved but hidden.</desc>
   <defs>
     <filter id="state-extrude" x="-24%" y="-30%" width="148%" height="172%" color-interpolation-filters="sRGB">
       <feMorphology in="SourceAlpha" operator="dilate" radius="1.2" result="bulkAlpha"/>
@@ -927,7 +961,7 @@
 
 <path class="separator1" fill="none" d="m 215,493 v 55 l 36,45 m -251,-168 h 147 l 68,68 h 85 l 54,54 v 46"/>
 
-<g class="campus-pin" transform="translate(473.6 466.4)" tabindex="0" role="button" data-place-name="Texas A&amp;M Main Campus" data-place-coords="30.6099&#176;N, 96.3405&#176;W" aria-label="Texas A&amp;M Main Campus, 30.6099 degrees north, 96.3405 degrees west">
+<g class="campus-pin" transform="translate(473.6 466.4)" tabindex="0" role="button" data-place-view="tamu" data-place-name="Texas A&amp;M Main Campus" data-place-coords="30.6099&#176;N, 96.3405&#176;W" aria-label="Texas A&amp;M Main Campus, 30.6099 degrees north, 96.3405 degrees west">
 <title>Texas A&amp;M Main Campus - 30.6099&#176;N, 96.3405&#176;W</title>
 <g class="campus-pin-scale">
 <g class="campus-pin-shape">
@@ -937,10 +971,54 @@
 </g>
 </g>
 </g>
+<g class="campus-pin city-pin" transform="translate(466.3 425.8)" tabindex="0" role="button" data-place-view="city" data-place-name="Dallas" data-place-coords="32.7767&#176;N, 96.7970&#176;W" aria-label="Dallas, 32.7767 degrees north, 96.7970 degrees west">
+<title>Dallas - 32.7767&#176;N, 96.7970&#176;W</title>
+<g class="campus-pin-scale">
+<g class="campus-pin-shape">
+<path class="pin-body" d="M0 0 C-12 -14 -18 -25 -18 -36 C-18 -47 -10 -55 0 -55 C10 -55 18 -47 18 -36 C18 -25 12 -14 0 0Z"/>
+<circle class="pin-center" cx="0" cy="-36" r="10"/>
+<text class="pin-label" x="0" y="-35.5">DAL</text>
+</g>
+</g>
+</g>
+
+<g class="campus-pin city-pin" transform="translate(451.0 472.7)" tabindex="0" role="button" data-place-view="city" data-place-name="Austin" data-place-coords="30.2672&#176;N, 97.7431&#176;W" aria-label="Austin, 30.2672 degrees north, 97.7431 degrees west">
+<title>Austin - 30.2672&#176;N, 97.7431&#176;W</title>
+<g class="campus-pin-scale">
+<g class="campus-pin-shape">
+<path class="pin-body" d="M0 0 C-12 -14 -18 -25 -18 -36 C-18 -47 -10 -55 0 -55 C10 -55 18 -47 18 -36 C18 -25 12 -14 0 0Z"/>
+<circle class="pin-center" cx="0" cy="-36" r="10"/>
+<text class="pin-label" x="0" y="-35.5">ATX</text>
+</g>
+</g>
+</g>
+
+<g class="campus-pin city-pin" transform="translate(489.3 482.2)" tabindex="0" role="button" data-place-view="iah" data-place-name="Houston / IAH" data-place-coords="29.7604&#176;N, 95.3698&#176;W" aria-label="Houston IAH, 29.7604 degrees north, 95.3698 degrees west">
+<title>Houston / IAH - 29.7604&#176;N, 95.3698&#176;W</title>
+<g class="campus-pin-scale">
+<g class="campus-pin-shape">
+<path class="pin-body" d="M0 0 C-12 -14 -18 -25 -18 -36 C-18 -47 -10 -55 0 -55 C10 -55 18 -47 18 -36 C18 -25 12 -14 0 0Z"/>
+<circle class="pin-center" cx="0" cy="-36" r="10"/>
+<text class="pin-label" x="0" y="-35.5">IAH</text>
+</g>
+</g>
+</g>
+
+<g class="campus-pin city-pin" transform="translate(438.6 488.3)" tabindex="0" role="button" data-place-view="city" data-place-name="San Antonio" data-place-coords="29.4241&#176;N, 98.4936&#176;W" aria-label="San Antonio, 29.4241 degrees north, 98.4936 degrees west">
+<title>San Antonio - 29.4241&#176;N, 98.4936&#176;W</title>
+<g class="campus-pin-scale">
+<g class="campus-pin-shape">
+<path class="pin-body" d="M0 0 C-12 -14 -18 -25 -18 -36 C-18 -47 -10 -55 0 -55 C10 -55 18 -47 18 -36 C18 -25 12 -14 0 0Z"/>
+<circle class="pin-center" cx="0" cy="-36" r="10"/>
+<text class="pin-label" x="0" y="-35.5">SAT</text>
+</g>
+</g>
+</g>
 </svg>
       </div>
       <div class="tamu-leaflet-panel" aria-label="Texas A&M GeoJSON map">
         <div class="tamu-leaflet-map" role="application"></div>
+        <div class="iah-leaflet-map" role="application" aria-label="Houston IAH map"></div>
         <div class="tamu-leaflet-status" hidden></div>
       </div>
       <button class="reset-view" type="button" hidden>Reset view</button>
@@ -958,6 +1036,7 @@
     const resetViewButton = document.querySelector(".reset-view");
     const mapBoard = document.querySelector(".map-board");
     const tamuLeafletElement = document.querySelector(".tamu-leaflet-map");
+    const iahLeafletElement = document.querySelector(".iah-leaflet-map");
     const tamuLeafletStatus = document.querySelector(".tamu-leaflet-status");
     const svgNS = "http://www.w3.org/2000/svg";
     const stateLayer = map.querySelector("#usa-map > g.states") || map.querySelector("#usa-map > g.state");
@@ -997,13 +1076,17 @@
     let zoomAnimationId = null;
     let lastPointerActivationAt = 0;
     let tamuLeafletMap = null;
-    let tamuRoadsLayer = null;
+    let texasRoadsLayer = null;
     let tamuLeasesLayer = null;
-    let tamuLeafletLoadPromise = null;
+    let tamuBuildingsLayer = null;
+    let houstonPlacesLayer = null;
     let tamuLeafletLayerControl = null;
-    const defaultViewBox = { x: 0, y: 0, width: 959, height: 593 };
+    let texasRoadsLoadPromise = null;
+    const fullMapViewBox = { x: 0, y: 0, width: 959, height: 593 };
+    const defaultViewBox = { x: 220, y: 310, width: 440, height: 272.23 };
     let currentViewBox = { ...defaultViewBox };
     const tamuViewBox = { x: 380, y: 370, width: 230, height: 142.24 };
+    const iahViewBox = { x: 374.3, y: 411.1, width: 230, height: 142.24 };
 
     function getStateCode(element) {
       return Array.from(element.classList)
@@ -1037,8 +1120,8 @@
     function restoreZoomedStateDisplay() {
       if (!zoomedElement) {
         clearActiveBorders();
-        stateName.textContent = "United States";
-        stateCode.textContent = "51";
+        stateName.textContent = "Texas";
+        stateCode.textContent = "TX";
         tooltip.hidden = true;
         return;
       }
@@ -1084,15 +1167,15 @@
 
     const leaseData = [
       {"name": "Casa Del Sol", "address": "401 Stasney St, College Station, TX 77840", "bus_stop": "Walk", "bus_route": "0", "rent": "$850", "coords": [30.6133, -96.3414]},
-      {"name": "Ion College Station", "address": "711 University Dr, College Station, TX 77840", "bus_stop": "Walk", "bus_route": "0", "rent": "$749", "coords": [30.6251, -96.3402]},
-      {"name": "The Stack at Legacy Point", "address": "711 Church Ave #101, College Station, TX 77840", "bus_stop": "Walk", "bus_route": "0", "rent": "$1,250", "coords": [30.6225, -96.3421]},
+      {"name": "Ion College Station", "address": "711 University Dr, College Station, TX 77840", "bus_stop": "Walk", "bus_route": "0", "rent": "$749", "coords": [30.62087098928564, -96.34294554591179]},
+      {"name": "The Stack at Legacy Point", "address": "711 Church Ave #101, College Station, TX 77840", "bus_stop": "Walk", "bus_route": "0", "rent": "$1,250", "coords": [30.622247816330106, -96.34342834353447]},
       {"name": "Northpoint Crossing", "address": "1501 Northpoint Ln, College Station, TX 77840", "bus_stop": "Walk", "bus_route": "0", "rent": "$715", "coords": [30.6358, -96.3416]},
       {"name": "100 Park", "address": "170 Century Square Dr, College Station, TX 77840", "bus_stop": "Walk", "bus_route": "0", "rent": "$1,516", "coords": [30.6255, -96.3426]},
       {"name": "Charming Studio Retreat", "address": "409 Tauber St APT D, College Station, TX 77840", "bus_stop": "Walk", "bus_route": "0", "rent": "", "coords": [30.6212, -96.3395]},
       {"name": "The Gardens Apartments (TAMU)", "address": "250 Charles Haltom Ave, College Station, TX 77840", "bus_stop": "Becky Gates Center", "bus_route": "4", "rent": "$1,191", "coords": [30.6186, -96.3335]},
       {"name": "Eastgate Apartments", "address": "401 Lincoln Ave, College Station, TX 77840", "bus_stop": "Lincoln @ Nimitz", "bus_route": "12", "rent": "$755", "coords": [30.6188, -96.3262]},
       {"name": "University Square", "address": "313 Lincoln Ave, College Station, TX 77840", "bus_stop": "Lincoln @ Nimitz", "bus_route": "12", "rent": "$699", "coords": [30.6191, -96.3275]},
-      {"name": "12 North", "address": "301 Church Ave, College Station, TX 77840", "bus_stop": "Fish Pond - South", "bus_route": "12", "rent": "$830", "coords": [30.6222, -96.3418]},
+      {"name": "12 North", "address": "301 Church Ave, College Station, TX 77840", "bus_stop": "Fish Pond - South", "bus_route": "12", "rent": "$830", "coords": [30.619202400466797, -96.34850174188615]},
       {"name": "The Standard at College Station", "address": "315 Boyett St, College Station, TX 77840", "bus_stop": "Fish Pond - South", "bus_route": "12", "rent": "", "coords": [30.6198, -96.3432]},
       {"name": "Sundance and Sausalito", "address": "1000 University Dr E, College Station, 77840", "bus_stop": "April Bloom", "bus_route": "12", "rent": "$854", "coords": [30.6231, -96.3208]},
       {"name": "Cedar Creek", "address": "1000 University Dr E, College Station, 77840", "bus_stop": "April Bloom", "bus_route": "12", "rent": "$974", "coords": [30.6231, -96.3208]},
@@ -1133,6 +1216,62 @@
       {"name": "Brazos Point Apartments", "address": "2401 Welsh Ave, College Station, TX 77845", "bus_stop": "Welsh @ Balcones", "bus_route": "34", "rent": "$825", "coords": [30.5912, -96.3288]}
     ];
 
+    const buildingData = [
+      {"name": "Commons Dining Hall", "category": "Dining Hall", "coords": [30.615528530294295, -96.33624136447908]},
+      {"name": "Sterling C. Evans Library", "category": "Library", "coords": [30.616678066778086, -96.33923470973969]},
+      {"name": "Sbisa Dining Hall", "category": "Dining Hall", "coords": [30.616931978618897, -96.34358525276184]},
+      {"name": "Wisenbaker Engineering Building", "category": "Academic building", "coords": [30.62081443855248, -96.33891016244891]}
+    ];
+
+    const draggableLeaseNames = new Set([]);
+
+    const draggableBuildingNames = new Set([]);
+
+    const houstonMapCenter = [29.839155, -95.467721];
+    const houstonFallbackPlaces = [
+      {"name": "George Bush Intercontinental Airport (IAH)", "category": "Airport", "coords": [29.98444, -95.34139]},
+      {"name": "Taipei Economic & Cultural Office in Houston", "category": "Taiwan office", "coords": [29.732271, -95.435649]}
+    ];
+
+    function isDraggableLease(lease) {
+      return draggableLeaseNames.has(lease.name);
+    }
+
+    function isDraggableBuilding(building) {
+      return draggableBuildingNames.has(building.name);
+    }
+
+    function formatCoords(coords) {
+      return `[${Number(coords[0]).toFixed(12)}, ${Number(coords[1]).toFixed(12)}]`;
+    }
+
+    function saveLeaseCoordDraft(lease, latLng) {
+      const coords = [latLng.lat, latLng.lng];
+      lease.coords = coords;
+      const draft = { ...(window.tamuLeaseCoordsDraft || {}) };
+      draft[lease.name] = coords;
+      window.tamuLeaseCoordsDraft = draft;
+      try {
+        localStorage.setItem("tamuLeaseCoordsDraft", JSON.stringify(draft));
+      } catch (error) {
+        console.warn("Could not save TAMU lease coord draft", error);
+      }
+      setTamuLeafletStatus(`${lease.name}: ${formatCoords(coords)}`);
+    }
+
+    function saveBuildingCoordDraft(building, latLng) {
+      const coords = [latLng.lat, latLng.lng];
+      building.coords = coords;
+      const draft = { ...(window.tamuBuildingCoordsDraft || {}) };
+      draft[building.name] = coords;
+      window.tamuBuildingCoordsDraft = draft;
+      try {
+        localStorage.setItem("tamuBuildingCoordsDraft", JSON.stringify(draft));
+      } catch (error) {
+        console.warn("Could not save TAMU building coord draft", error);
+      }
+      setTamuLeafletStatus(`${building.name}: ${formatCoords(coords)}`);
+    }
     async function loadGeoJson(url) {
       const response = await fetch(url, { cache: "no-cache" });
       if (!response.ok) {
@@ -1190,19 +1329,142 @@
       }
 
       wrapper.appendChild(badges);
+      if (isDraggableLease(lease)) {
+        appendText(wrapper, "p", "address", `Coords: ${formatCoords(lease.coords)}`);
+        appendText(wrapper, "p", "route-label", "Drag to adjust, then tell Codex to lock it.");
+      }
       return wrapper;
     }
+
+    function createBuildingPopup(building) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "tamu-popup";
+      appendText(wrapper, "h3", "", building.name || "Campus building");
+      if (building.address) {
+        appendText(wrapper, "p", "address", building.address);
+      }
+      appendText(wrapper, "p", "address", building.category || "Campus building");
+      return wrapper;
+    }
+
+    function createPlacePopup(place) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "tamu-popup";
+      appendText(wrapper, "h3", "", place.name || "Houston place");
+      appendText(wrapper, "p", "address", place.category || "Houston place");
+      return wrapper;
+    }
+
+    const tamuLeafletBounds = [[30.56900553008426, -96.39116413660328], [30.672623347020696, -96.28665618829454]];
+    const tamuLeafletView = { center: [30.62081443855248, -96.33891016244891], zoom: 13, bounds: tamuLeafletBounds, label: "Texas A&M / College Station" };
+    const houstonLeafletBounds = [[29.590774151038, -95.573465301882], [30.015598098309, -95.137489983175]];
+    const houstonLeafletView = { center: [29.803186124674, -95.355477642529], zoom: 11, bounds: houstonLeafletBounds, label: "Houston / IAH" };
+    const tamuRoadBounds = tamuLeafletBounds;
+    const houstonRoadBounds = houstonLeafletBounds;
+    const sharedRoadStyle = {
+      color: "#7a7a7a",
+      weight: 2.5,
+      opacity: 0.6,
+      lineCap: "round",
+      lineJoin: "round",
+    };
 
     function syncTamuLeafletSize() {
       if (!tamuLeafletMap) {
         return;
       }
-      requestAnimationFrame(() => {
-        tamuLeafletMap.invalidateSize();
+      [0, 120, 420, 900].forEach((delay) => {
+        window.setTimeout(() => tamuLeafletMap.invalidateSize(), delay);
       });
     }
 
-    function initTamuLeafletMap() {
+    function syncIahLeafletSize() {
+      syncTamuLeafletSize();
+    }
+
+    function scheduleLeafletWork(callback, delay = 0) {
+      window.setTimeout(() => {
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(callback, { timeout: 1800 });
+        } else {
+          callback();
+        }
+      }, delay);
+    }
+
+    function createHoustonMarker(place, icon) {
+      const marker = L.marker(place.coords, {
+        icon,
+        riseOnHover: true,
+        keyboard: true,
+      });
+      marker.bindPopup(createPlacePopup(place), {
+        maxWidth: 300,
+        className: "lease-popup-shell",
+      });
+      marker.bindTooltip(place.name, { direction: "top", offset: [0, -30] });
+      return marker;
+    }
+
+    function ensureRoadLayer(delay = 0) {
+      if (!tamuLeafletMap) {
+        return Promise.resolve();
+      }
+      if (texasRoadsLoadPromise) {
+        return texasRoadsLoadPromise;
+      }
+
+      setTamuLeafletStatus("Loading TAMU + TX-6 + Houston roads from export.geojson...");
+      texasRoadsLoadPromise = loadGeoJson("export.geojson")
+        .then((roadsGeoJson) => new Promise((resolve) => {
+          scheduleLeafletWork(() => {
+            const roadLayer = L.geoJSON(roadsGeoJson, {
+              filter: isRoadGeometry,
+              style: sharedRoadStyle,
+            }).addTo(texasRoadsLayer);
+            syncTamuLeafletSize();
+            setTamuLeafletStatus(`Loaded ${roadLayer.getLayers().length} road segments from export.geojson.`);
+            window.setTimeout(() => setTamuLeafletStatus(""), 3000);
+            resolve(roadLayer);
+          }, delay);
+        }))
+        .catch((error) => {
+          console.error(error);
+          setTamuLeafletStatus("Could not load export.geojson. Open this page through the local server, not file://.");
+        });
+      return texasRoadsLoadPromise;
+    }
+
+    function maybeLoadVisibleRoads() {
+      if (texasRoadsLayer && tamuLeafletMap?.hasLayer(texasRoadsLayer)) {
+        ensureRoadLayer(120);
+      }
+    }
+    function focusTexasLeaflet(targetView) {
+      if (!tamuLeafletMap) {
+        return;
+      }
+      const view = targetView === "houston" ? houstonLeafletView : tamuLeafletView;
+      syncTamuLeafletSize();
+      if (view.bounds) {
+        tamuLeafletMap.flyToBounds(view.bounds, {
+          animate: true,
+          duration: 1.05,
+          easeLinearity: 0.25,
+          padding: [8, 8],
+        });
+      } else {
+        tamuLeafletMap.flyTo(view.center, view.zoom, {
+          animate: true,
+          duration: 1.05,
+          easeLinearity: 0.25,
+        });
+      }
+      ensureRoadLayer(160);
+      window.setTimeout(maybeLoadVisibleRoads, 1200);
+    }
+
+    function initTexasLeafletMap(targetView = "tamu", shouldFocus = true) {
       if (!tamuLeafletElement) {
         return;
       }
@@ -1211,14 +1473,17 @@
         return;
       }
       if (tamuLeafletMap) {
-        syncTamuLeafletSize();
+        if (shouldFocus) {
+          focusTexasLeaflet(targetView);
+        }
         return;
       }
 
-      setTamuLeafletStatus("Loading College Station roads and lease pins...");
+      const startView = targetView === "houston" ? houstonLeafletView : tamuLeafletView;
+      setTamuLeafletStatus("Opening unified Texas Leaflet map...");
       tamuLeafletMap = L.map(tamuLeafletElement, {
-        center: [30.615, -96.340],
-        zoom: 14,
+        center: startView.center,
+        zoom: startView.zoom,
         zoomControl: true,
         preferCanvas: true,
       });
@@ -1237,53 +1502,107 @@
         popupAnchor: [0, -38],
       });
 
+      const buildingIcon = L.divIcon({
+        className: "building-pin-icon",
+        html: '<span class="building-pin"></span>',
+        iconSize: [36, 44],
+        iconAnchor: [18, 42],
+        popupAnchor: [0, -38],
+      });
+
       tamuLeasesLayer = L.layerGroup(leaseData.map((lease) => {
+        const draggable = isDraggableLease(lease);
         const marker = L.marker(lease.coords, {
           icon: leaseIcon,
           riseOnHover: true,
           keyboard: true,
+          draggable,
+          autoPan: draggable,
         });
         marker.bindPopup(createLeasePopup(lease), {
           maxWidth: 360,
           className: "lease-popup-shell",
         });
         marker.bindTooltip(lease.name, { direction: "top", offset: [0, -30] });
+        if (draggable) {
+          marker.on("dragstart", () => {
+            setTamuLeafletStatus(`Dragging ${lease.name}...`);
+          });
+          marker.on("dragend", () => {
+            saveLeaseCoordDraft(lease, marker.getLatLng());
+            marker.setPopupContent(createLeasePopup(lease));
+            marker.openPopup();
+          });
+        }
         return marker;
       })).addTo(tamuLeafletMap);
 
-      tamuLeafletLoadPromise = loadGeoJson("college_station.geojson")
-        .then((roadsGeoJson) => {
-          tamuRoadsLayer = L.geoJSON(roadsGeoJson, {
-            filter: isRoadGeometry,
-            style: {
-              color: "#7a7a7a",
-              weight: 2.5,
-              opacity: 0.6,
-              lineCap: "round",
-              lineJoin: "round",
-            },
-          }).addTo(tamuLeafletMap);
-
-          tamuLeafletLayerControl = L.control.layers(null, {
-            Roads: tamuRoadsLayer,
-            Leases: tamuLeasesLayer,
-          }, {
-            collapsed: false,
-            position: "bottomright",
-          }).addTo(tamuLeafletMap);
-
-          syncTamuLeafletSize();
-          setTamuLeafletStatus(`Loaded ${tamuRoadsLayer.getLayers().length} road segments and ${leaseData.length} lease pins.`);
-          window.setTimeout(() => setTamuLeafletStatus(""), 3600);
-        })
-        .catch((error) => {
-          console.error(error);
-          setTamuLeafletStatus("Could not load college_station.geojson. Open this page through the local server, not file://.");
+      tamuBuildingsLayer = L.layerGroup(buildingData.map((building) => {
+        const draggable = isDraggableBuilding(building);
+        const marker = L.marker(building.coords, {
+          icon: buildingIcon,
+          riseOnHover: true,
+          keyboard: true,
+          draggable,
+          autoPan: draggable,
         });
+        marker.bindPopup(createBuildingPopup(building), {
+          maxWidth: 300,
+          className: "lease-popup-shell",
+        });
+        marker.bindTooltip(building.name, { direction: "top", offset: [0, -30] });
+        if (draggable) {
+          marker.on("dragstart", () => {
+            setTamuLeafletStatus(`Dragging ${building.name}...`);
+          });
+          marker.on("dragend", () => {
+            saveBuildingCoordDraft(building, marker.getLatLng());
+            marker.setPopupContent(createBuildingPopup(building));
+            marker.openPopup();
+          });
+        }
+        return marker;
+      })).addTo(tamuLeafletMap);
+
+      houstonPlacesLayer = L.layerGroup(houstonFallbackPlaces.map((place) => createHoustonMarker(place, buildingIcon)))
+        .addTo(tamuLeafletMap);
+      texasRoadsLayer = L.layerGroup().addTo(tamuLeafletMap);
+
+      tamuLeafletLayerControl = L.control.layers(null, {
+        Roads: texasRoadsLayer,
+        Leases: tamuLeasesLayer,
+        "Campus buildings": tamuBuildingsLayer,
+        "IAH / TECO": houstonPlacesLayer,
+      }, {
+        collapsed: false,
+        position: "bottomright",
+      }).addTo(tamuLeafletMap);
+
+      tamuLeafletMap.on("overlayadd", (event) => {
+        if (event.layer === texasRoadsLayer) {
+          ensureRoadLayer(80);
+        }
+      });
+      tamuLeafletMap.on("moveend zoomend", maybeLoadVisibleRoads);
+
+      syncTamuLeafletSize();
+      if (shouldFocus) {
+        focusTexasLeaflet(targetView);
+      }
+      setTamuLeafletStatus(`Unified map ready. Showing ${leaseData.length} lease pins, ${buildingData.length} campus pins, and Houston place pins.`);
+      window.setTimeout(maybeLoadVisibleRoads, 900);
     }
-    function exitTamuZoom() {
-      map.classList.remove("is-tamu-zoom", "is-tamu-zooming");
-      mapBoard?.classList.remove("is-tamu-zoom", "is-tamu-zooming");
+
+    function initTamuLeafletMap(shouldFocus = true) {
+      initTexasLeafletMap("tamu", shouldFocus);
+    }
+
+    function initIahLeafletMap(shouldFocus = true) {
+      initTexasLeafletMap("houston", shouldFocus);
+    }
+    function exitPlaceZoom() {
+      map.classList.remove("is-tamu-zoom", "is-tamu-zooming", "is-iah-zoom", "is-iah-zooming");
+      mapBoard?.classList.remove("is-tamu-zoom", "is-tamu-zooming", "is-iah-zoom", "is-iah-zooming");
       if (activePlace) {
         activePlace.classList.remove("is-active");
         activePlace = null;
@@ -1291,7 +1610,7 @@
     }
 
     function zoomToTamu(element) {
-      if (map.classList.contains("is-tamu-zoom") || map.classList.contains("is-tamu-zooming")) {
+      if (isPlaceZoomActive()) {
         return;
       }
       if (zoomedElement) {
@@ -1303,11 +1622,11 @@
         activeState = null;
       }
       clearActiveBorders();
-      map.classList.remove("is-zoomed", "is-tamu-zoom");
-      mapBoard?.classList.remove("is-tamu-zoom");
+      map.classList.remove("is-zoomed", "is-tamu-zoom", "is-iah-zoom");
+      mapBoard?.classList.remove("is-tamu-zoom", "is-iah-zoom");
       map.classList.add("is-tamu-zooming");
       mapBoard?.classList.add("is-tamu-zooming");
-      initTamuLeafletMap();
+      initTamuLeafletMap(false);
       syncTamuLeafletSize();
       activePlace = element;
       element.classList.add("is-active");
@@ -1321,7 +1640,50 @@
         mapBoard?.classList.remove("is-tamu-zooming");
         mapBoard?.classList.add("is-tamu-zoom");
         syncTamuLeafletSize();
+        focusTexasLeaflet("tamu");
       });
+    }
+
+    function zoomToIah(element) {
+      if (isPlaceZoomActive()) {
+        return;
+      }
+      if (zoomedElement) {
+        zoomedElement.classList.remove("is-zoomed", "is-active");
+        zoomedElement = null;
+      }
+      if (activeState) {
+        activeState.classList.remove("is-active");
+        activeState = null;
+      }
+      clearActiveBorders();
+      map.classList.remove("is-zoomed", "is-tamu-zoom", "is-iah-zoom");
+      mapBoard?.classList.remove("is-tamu-zoom", "is-iah-zoom");
+      map.classList.add("is-iah-zooming");
+      mapBoard?.classList.add("is-iah-zooming");
+      initIahLeafletMap(false);
+      syncIahLeafletSize();
+      activePlace = element;
+      element.classList.add("is-active");
+      stateName.textContent = "Houston / IAH";
+      stateCode.textContent = "IAH map";
+      tooltip.hidden = true;
+      resetViewButton.hidden = false;
+      animateViewBox(iahViewBox, () => {
+        map.classList.remove("is-iah-zooming");
+        map.classList.add("is-iah-zoom");
+        mapBoard?.classList.remove("is-iah-zooming");
+        mapBoard?.classList.add("is-iah-zoom");
+        syncIahLeafletSize();
+        focusTexasLeaflet("houston");
+      });
+    }
+
+    function isPlaceZoomActive() {
+      return map.classList.contains("is-tamu-zoom")
+        || map.classList.contains("is-tamu-zooming")
+        || map.classList.contains("is-iah-zoom")
+        || map.classList.contains("is-iah-zooming");
     }
 
     renderTamuDetail();
@@ -1338,7 +1700,7 @@
     }
 
     function handleMapActivation(event) {
-      if (map.classList.contains("is-tamu-zoom") || map.classList.contains("is-tamu-zooming")) {
+      if (isPlaceZoomActive()) {
         return;
       }
       const state = findInteractiveState(event.target);
@@ -1356,7 +1718,9 @@
     }
 
     function updatePinScale(box) {
-      const pinScale = box.width / defaultViewBox.width;
+      const isDefaultView = Math.abs(box.width - defaultViewBox.width) < 0.01;
+      const targetScreenScale = isDefaultView ? 0.5 : 1;
+      const pinScale = targetScreenScale * (box.width / defaultViewBox.width);
       campusPinScales.forEach((pinScaleGroup) => {
         pinScaleGroup?.setAttribute("transform", `scale(${pinScale})`);
       });
@@ -1367,6 +1731,8 @@
       map.setAttribute("viewBox", `${box.x} ${box.y} ${box.width} ${box.height}`);
       updatePinScale(box);
     }
+
+    updatePinScale(defaultViewBox);
 
     function easeOutCubic(value) {
       return 1 - Math.pow(1 - value, 3);
@@ -1462,7 +1828,7 @@
         activePlace = null;
       }
 
-      exitTamuZoom();
+      exitPlaceZoom();
       activeState = element;
       zoomedElement = element;
       bringStateToFront(element);
@@ -1479,14 +1845,14 @@
 
     function resetMapView() {
       zoomedElement = null;
-      exitTamuZoom();
+      exitPlaceZoom();
       resetViewButton.hidden = true;
       interactiveStates.forEach((element) => element.classList.remove("is-active", "is-zoomed"));
       map.classList.remove("is-zoomed");
       clearActiveBorders();
       activeState = null;
-      stateName.textContent = "United States";
-      stateCode.textContent = "51";
+      stateName.textContent = "Texas";
+      stateCode.textContent = "TX";
       tooltip.hidden = true;
       animateViewBox(defaultViewBox);
     }
@@ -1498,7 +1864,7 @@
     }
 
     function showState(element, position) {
-      if (map.classList.contains("is-tamu-zoom") || map.classList.contains("is-tamu-zooming")) {
+      if (isPlaceZoomActive()) {
         return;
       }
       const name = element.dataset.stateName;
@@ -1596,13 +1962,21 @@
       }
     });
 
+    function activatePlace(element) {
+      if (element.dataset.placeView === "tamu") {
+        zoomToTamu(element);
+      } else if (element.dataset.placeView === "iah") {
+        zoomToIah(element);
+      }
+    }
+
     campusPins.forEach((element) => {
       const name = element.dataset.placeName;
       const coords = element.dataset.placeCoords;
       const title = element.querySelector("title");
 
       function showPlace(position) {
-        if (map.classList.contains("is-tamu-zoom") && activePlace === element) {
+        if (isPlaceZoomActive() && activePlace === element) {
           return;
         }
         if (activeState) {
@@ -1630,7 +2004,7 @@
       }
 
       function resetPlace() {
-        if (map.classList.contains("is-tamu-zoom") && activePlace === element) {
+        if (isPlaceZoomActive() && activePlace === element) {
           return;
         }
         element.classList.remove("is-active");
@@ -1639,8 +2013,8 @@
           if (zoomedElement) {
             restoreZoomedStateDisplay();
           } else {
-            stateName.textContent = "United States";
-            stateCode.textContent = "51";
+            stateName.textContent = "Texas";
+            stateCode.textContent = "TX";
             tooltip.hidden = true;
           }
         }
@@ -1656,7 +2030,7 @@
         event.preventDefault();
         event.stopPropagation();
         lastPointerActivationAt = performance.now();
-        zoomToTamu(element);
+        activatePlace(element);
       });
       element.addEventListener("click", (event) => {
         event.preventDefault();
@@ -1664,12 +2038,12 @@
         if (performance.now() - lastPointerActivationAt < 500) {
           return;
         }
-        zoomToTamu(element);
+        activatePlace(element);
       });
       element.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          zoomToTamu(element);
+          activatePlace(element);
         }
       });
     });

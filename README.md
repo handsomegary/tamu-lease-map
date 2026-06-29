@@ -6,7 +6,7 @@ This project is a local interactive web map. The first screen is an SVG map of t
 
 The main page should be opened through the included local Node static server, not by double-clicking `index.html`.
 
-This is needed because the College Station map uses `fetch("college_station.geojson")`. Browsers usually block local file reads when a page is opened with `file://`, while `http://127.0.0.1:8765/` lets the page and GeoJSON file be served from the same local origin.
+This is needed because the College Station map uses `fetch("export.geojson")`. Browsers usually block local file reads when a page is opened with `file://`, while `http://127.0.0.1:8765/` lets the page and GeoJSON file be served from the same local origin.
 
 ### Easy Mode: Download ZIP
 
@@ -69,7 +69,6 @@ On Windows, `cd tamu-lease-map\outputs` also works.
 |   |-- index.html
 |   |-- static_server.js
 |   |-- click_to_open_the_whole_project.bat
-|   |-- college_station.geojson
 |   |-- export.geojson
 |   |-- leases.geojson
 |   |-- tamu-geojson.js
@@ -102,13 +101,13 @@ A small local Node HTTP server. It serves files from `outputs/` on:
 http://127.0.0.1:8765/
 ```
 
-It is local only. It is used so the browser can load `college_station.geojson` through `fetch()`.
+It is local only. It is used so the browser can load `export.geojson` through `fetch()`.
 
 `outputs/click_to_open_the_whole_project.bat`
 
 Windows one-click launcher for non-developer users. It detects its own folder, opens the local map URL in the default browser, then starts `node static_server.js` in the same window.
 
-`outputs/college_station.geojson`
+`outputs/export.geojson`
 
 The OpenStreetMap-derived road data for College Station. The current map renders LineString and MultiLineString features from this file as dark gray roads:
 
@@ -197,18 +196,18 @@ Network requirement:
 
 Used by:
 
-- `outputs/college_station.geojson`
+- `outputs/export.geojson`
 - CartoDB tile attribution
 
 Purpose:
 
-- `college_station.geojson` contains local road geometry from OpenStreetMap-derived data.
+- `export.geojson` contains combined TAMU, TX-6, and Houston road geometry from OpenStreetMap-derived data.
 - The CartoDB tile layer is also based on OpenStreetMap data.
 
 Current use:
 
-- Road geometry is stored locally in `outputs/college_station.geojson`.
-- The browser loads it from the local Node server using `fetch("college_station.geojson")`.
+- Combined TAMU, TX-6, and Houston road geometry is stored locally in `outputs/export.geojson`.
+- The browser loads it from the local Node server using `fetch("export.geojson")`.
 
 Network requirement:
 
@@ -261,7 +260,7 @@ Network requirement:
 5. Clicking the TAMU pin opens the full-screen College Station Leaflet panel.
 6. Leaflet loads from Unpkg.
 7. CartoDB Positron Light No Labels tiles load from Carto.
-8. `college_station.geojson` is fetched locally from the Node server.
+8. `export.geojson` is fetched locally from the Node server.
 9. Rental markers are generated from the hard-coded `leaseData` array.
 10. Clicking a rental pin opens a `.tamu-popup` with:
     - Apartment name
@@ -283,7 +282,7 @@ To make the College Station map more offline-friendly:
 
 1. Download Leaflet JS/CSS into `outputs/vendor/leaflet/`.
 2. Change `index.html` to reference those local files.
-3. Replace `fetch("college_station.geojson")` with an embedded JS variable or keep using the local Node server.
+3. Replace `fetch("export.geojson")` with an embedded JS variable or keep using the local Node server.
 4. Accept a blank/minimal background, or prepare offline map tiles.
 
 ## Git Notes

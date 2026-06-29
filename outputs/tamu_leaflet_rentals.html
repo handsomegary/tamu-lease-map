@@ -218,7 +218,7 @@
       <h1>TAMU Lease Map</h1>
       <p>College Station roads and lease locations near Texas A&amp;M University.</p>
     </section>
-    <div class="map-status" data-status>Loading college_station.geojson and leases.geojson...</div>
+    <div class="map-status" data-status>Loading export.geojson and leases.geojson...</div>
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -326,7 +326,7 @@
     async function initLayers() {
       try {
         const [roadsGeoJson, leasesGeoJson] = await Promise.all([
-          loadGeoJson("college_station.geojson"),
+          loadGeoJson("export.geojson"),
           loadGeoJson("leases.geojson"),
         ]);
 
@@ -370,7 +370,7 @@
         window.setTimeout(() => setStatus(""), 3600);
       } catch (error) {
         console.error(error);
-        setStatus("Could not load GeoJSON files. Use a local web server and keep college_station.geojson, leases.geojson, and this HTML in the same folder.");
+        setStatus("Could not load GeoJSON files. Use a local web server and keep export.geojson, leases.geojson, and this HTML in the same folder.");
       }
     }
 
