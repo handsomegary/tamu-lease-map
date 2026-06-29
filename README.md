@@ -41,8 +41,8 @@ http://127.0.0.1:8765/index.html
 ### Expert Mode: Git Clone
 
 ```bash
-git clone https://github.com/handsomegary/tamu-lease-map.git
-cd tamu-lease-map/outputs
+git clone https://github.com/handsomegary/tamu-surrounding-cities-map.git
+cd tamu-surrounding-cities-map/outputs
 node static_server.js
 ```
 
@@ -184,13 +184,8 @@ A collection of Python automation scripts for course material downloading and ma
 Current public repository:
 
 ```text
-https://github.com/handsomegary/tamu-lease-map
+https://github.com/handsomegary/tamu-surrounding-cities-map
 ```
 
-Suggested repository name if renamed:
-
-```text
-tamu-surrounding-cities-map
-```
 
 The default branch is `main`.
