@@ -1,6 +1,6 @@
-# Interactive U.S. and TAMU Lease Map
+# TAMU and Surrounding Cities Map
 
-This project is a local interactive web map. The first screen is an SVG map of the United States. Clicking the Texas A&M University pin opens a College Station Leaflet map with road data and rental housing pins.
+This project is a local interactive map centered on Texas A&M University and surrounding Texas city areas, with a Texas SVG entry view and a Leaflet road map for TAMU, TX-6, Houston/IAH, and related pins.
 
 ## How to Run
 
